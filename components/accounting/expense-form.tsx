@@ -34,7 +34,7 @@ import { format } from 'date-fns'
 const formSchema = z.object({
     category: z.string().min(1, 'Required'),
     description: z.string().optional(),
-    amount: z.coerce.number().min(1),
+    amount: z.number().min(1, 'Amount must be greater than 0'),
     date: z.date(),
     paymentMode: z.string().min(1)
 })
@@ -122,7 +122,11 @@ export function ExpenseForm() {
                                     <FormItem className="flex-1">
                                         <FormLabel>Amount</FormLabel>
                                         <FormControl>
-                                            <Input type="number" {...field} />
+                                            <Input
+                                                type="number"
+                                                {...field}
+                                                onChange={e => field.onChange(parseFloat(e.target.value) || 0)}
+                                            />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>

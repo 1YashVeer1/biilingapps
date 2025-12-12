@@ -23,6 +23,8 @@ export async function createParty(data: any) {
 
     const { data: profile } = await supabase.from('users_profile').select('tenant_id').eq('id', user.id).single()
 
+    if (!profile) throw new Error('User profile not found')
+
     const { error } = await supabase.from('parties').insert({
         ...data,
         tenant_id: profile.tenant_id

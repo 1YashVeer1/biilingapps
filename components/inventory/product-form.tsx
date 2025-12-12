@@ -32,15 +32,20 @@ export function ProductForm({ initialData, productId }: ProductFormProps) {
     const [loading, setLoading] = React.useState(false)
 
     const form = useForm<ProductFormValues>({
-        resolver: zodResolver(productSchema),
+        resolver: zodResolver(productSchema) as any,
         defaultValues: initialData || {
             name: '',
             sku: '',
             price: 0,
+            cost_price: 0,
             stock_quantity: 0,
             gst_rate: 0,
             unit: 'pcs',
             low_stock_threshold: 5,
+            description: '',
+            hsn_code: '',
+            barcode: '',
+            image_url: ''
         },
     })
 
