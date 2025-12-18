@@ -15,6 +15,15 @@ export const productSchema = z.object({
     barcode: z.string().optional(),
     image_url: z.string().optional(),
     type: z.enum(['product', 'service']).default('product'),
+    
+    // New fields
+    category: z.string().optional(),
+    tax_type: z.enum(['inclusive', 'exclusive']).default('exclusive'),
+    purchase_tax_type: z.enum(['inclusive', 'exclusive']).default('exclusive'),
+    discount: z.number().min(0).default(0),
+    discount_type: z.enum(['percentage', 'flat']).default('percentage'),
+    wholesale_price: z.number().min(0).optional(),
+    opening_stock_date: z.date().optional(),
 })
 
 export type ProductFormValues = z.infer<typeof productSchema>

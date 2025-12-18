@@ -33,6 +33,18 @@ export async function createProduct(data: ProductFormValues) {
     const supabase = await createClient()
     const validated = productSchema.parse(data)
 
+    const {
+        // Exclude fields not yet in DB
+        category,
+        tax_type,
+        purchase_tax_type,
+        discount,
+        discount_type,
+        wholesale_price,
+        opening_stock_date,
+        ...dbData
+    } = validated
+
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) throw new Error('Unauthorized')
 
@@ -46,7 +58,7 @@ export async function createProduct(data: ProductFormValues) {
     if (!profile) throw new Error('Profile not found')
 
     const { error } = await supabase.from('products').insert({
-        ...validated,
+        ...dbData,
         tenant_id: profile.tenant_id,
     })
 
@@ -59,9 +71,21 @@ export async function updateProduct(id: string, data: ProductFormValues) {
     const supabase = await createClient()
     const validated = productSchema.parse(data)
 
+    const {
+        // Exclude fields not yet in DB
+        category,
+        tax_type,
+        purchase_tax_type,
+        discount,
+        discount_type,
+        wholesale_price,
+        opening_stock_date,
+        ...dbData
+    } = validated
+
     const { error } = await supabase
         .from('products')
-        .update(validated)
+        .update(dbData)
         .eq('id', id)
 
     if (error) throw new Error(error.message)
